@@ -3,7 +3,7 @@ window.addEventListener("DOMContentLoaded", function() {
     "use strict";
 
     let tab = document.querySelectorAll(".info-header-tab"),
-        info = document.querySelector(".info-header"),
+        infoHeader = document.querySelector(".info-header"),
         tabContent = document.querySelectorAll(".info-tabcontent");
 
     function hideTabContent(a) {
@@ -24,7 +24,7 @@ window.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    info.addEventListener("click", function(event) {
+    infoHeader.addEventListener("click", function(event) {
         let target = event.target;
 
         if(target && target.classList.contains("info-header-tab")) {
@@ -81,4 +81,44 @@ window.addEventListener("DOMContentLoaded", function() {
     }
 
     setClock("timer", deadline);
+
+    // Modal window
+
+    let more = document.querySelector(".more"),
+        overlay = document.querySelector(".overlay"),
+        close = document.querySelector(".popup-close");
+
+    more.addEventListener("click", function() {
+        this.classList.add("more-splash");
+        showModalWindow();
+    });
+
+    close.addEventListener("click", function() {
+        more.classList.remove("more-splash");
+        showModalWindow(false);
+    });
+
+    function showModalWindow(show) {
+        if(show === false) {
+            document.body.style.overflow = "";
+            overlay.style.display = "none";
+            return;
+        }
+
+        overlay.style.display = "block";
+        document.body.style.overflow = "hidden";
+    }
+
+    // Modal window in tab
+    let info = document.querySelector(".info");
+
+    info.addEventListener("click", function(event) {
+        
+        let target = event.target;
+
+        if(target && target.classList.contains("description-btn")) {
+            // console.log("done");
+            showModalWindow();
+        }
+    });
 });
