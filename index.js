@@ -148,19 +148,29 @@ window.addEventListener("DOMContentLoaded", function() {
         let formData = new FormData(form);
         request.send(formData);
 
-        request.addEventListener("readystatechange", function() {
-            if (request.readyState < 4) {
-                statusMessage.innerHTML = message.loading;
-            } else if (request.readyState === 4 && request.status == 200) {
-                statusMessage.innerHTML = message.success;
-            } else {
-                statusMessage.innerHTML = message.failure;
-            }
+        let promise = new Promise(function(resolve, reject) {
+            request.addEventListener("readystatechange", function() {
+                if (request.readyState < 4) {
+                    statusMessage.innerHTML = message.loading;
+                } else if (request.readyState === 4 && request.status == 200) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            });
         });
 
-        for (let i = 0; i < input.length; i++) {
-            input[i].value = "";
-        }
+        promise.then(function() {
+            statusMessage.innerHTML = message.success; 
+        }).then(function() {
+            for (let i = 0; i < input.length; i++) {
+                input[i].value = "";
+            }
+        }).catch(function() {
+            statusMessage.innerHTML = message.failure;
+        });
+
+        
     });
 
     // Form contact
